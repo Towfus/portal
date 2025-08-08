@@ -520,14 +520,6 @@ include 'user_header.php';
             </div>
         </div>
 
-        <!-- Search and Filter Section -->
-        <div class="filter-section fade-in">
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-input" placeholder="Search announcements by title or content...">
-            </div>
-        </div>
-
         <!-- Announcements Grid -->
         <div class="announcements-grid fade-in">
             <?php if (!empty($all_announcements)): ?>
