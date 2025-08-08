@@ -1,0 +1,87 @@
+
+/* Footer Styles */
+footer {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    padding: 1rem;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    font-family: 'Roboto', sans-serif;
+}
+/* Base link style */
+.footer-info a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Address hover color */
+.footer-info a.address-link:hover {
+    color: #007bff; /* Purple */
+}
+
+/* Phone number hover color */
+.footer-info a.phone-link:hover {
+    color: #007bff; /* Blue */
+}
+
+/* Email hover color */
+.footer-info a.email-link:hover {
+    color: #007bff; /* Green */
+}
+
+/* Website hover color */
+.footer-info a.website-link:hover {
+    color: #007bff; /* Red */
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.deped-footer {
+    padding: 10px 0;
+}
+
+.footer-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer-logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.footer-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.footer-info {
+    text-align: left;
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+.copyright {
+    margin-top: 10px;
+    font-size: 0.7rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .footer-info-container {
+        flex-direction: column;
+    }
+    
+    .footer-info {
+        text-align: center;
+        margin-top: 10px;
+    }
+}

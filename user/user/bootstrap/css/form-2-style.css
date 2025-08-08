@@ -1,0 +1,355 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root{
+    --primary-bg: #ffffff;
+    --sidebar-color: #2b3a8f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.content-container {
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Container adjustments to maximize width */
+.container, 
+.container-fluid {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Adjustments for cards to use full width */
+.card {
+    border: none;
+    width: 100%;
+}
+
+/* Make the main element take all available space */
+.main {
+    flex-grow: 1;
+    width: calc(100% - 70px);
+}
+
+#sidebar.expand + .main {
+    width: calc(100% - 260px);
+}
+/* Header Styling */
+.grid-header {
+    text-align: center;
+    background-color: #2B3A8F; /* Matching Sidebar Color */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 0 auto 20px auto; /* Centers the header */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Adjust width */
+    max-width: 1000px; /* Prevent it from being too wide */
+}
+
+/* Rating Scale Styling */
+.grid-header p {
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Bold numbers for rating */
+.grid-header p strong {
+    color: #7cdfa8; /* Green color for emphasis */
+    font-weight: bold;
+}
+
+/* Section Titles - Centered Above Each Group */
+.section-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px; /* Adjusted to fit better */
+    margin-bottom: 10px;
+    color: #747479;
+    border-bottom: 2px solid #747479;
+    padding-bottom: 5px;
+    width: 100%;
+    grid-column: span 3; /* Ensures it takes full width */
+}
+
+/* Grid Container - Three Equal Columns */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+    align-items: stretch; /* Ensures all boxes align */
+}
+
+/* Ensuring the section titles don't break the grid */
+.section {
+    display: contents;
+}
+
+/* Individual Box Styling */
+.box {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #373a3b;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 200px; /* Allow the box to expand if needed */
+    height: auto;
+    flex: 1;
+}
+
+/* Row Styling */
+.row {
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid #e0e0e0;
+    height: auto;
+    word-wrap: break-word;
+}
+
+/* Title Row Styling (First Row) */
+.row:first-child {
+    font-weight: bold;
+    padding: 10px;
+    font-size: 14px;
+    min-height: 40px;
+    height: auto; /* Allow dynamic height */
+    text-align: center;
+    white-space: normal; /* Allow multi-line text */
+    word-wrap: break-word; /* Break long words */
+    overflow-wrap: break-word; /* Alternative for better wrapping */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box; /* Includes padding in width calculation */
+}
+
+/* Expandable Second Row */
+.row:last-child {
+    background-color: #e6f7ff;
+    flex-grow: 1; /* Allow it to take up remaining space */
+    min-height: 50px;
+    height: auto;
+}
+
+/* Responsive Grid */
+@media (max-width: 1024px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-title {
+        grid-column: span 2; /* Adjusts for 2-column layout */
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .section-title {
+        grid-column: span 1; /* Adjusts for 1-column layout */
+    }
+}
+
+/* Numbered List Styling */
+.row ol {
+    counter-reset: list-counter;
+    padding-left: 20px;
+}
+
+.row ol li {
+    counter-increment: list-counter;
+    list-style: none;
+    position: relative;
+}
+
+.row ol li::before {
+    content: counter(list-counter) ". ";
+    font-weight: bold;
+    color: #2B3A8F;
+}
+.input-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Align vertically */
+    width: 100%; /* Ensure full width of row */
+    margin-top: 10px;
+    margin-top: auto;
+}
+
+.user-dropdown {
+    width: 30%; /* Adjust width */
+    padding: 8px;
+    border: 2px solid #6a7074b7;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    background-color: white;
+    cursor: pointer;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .box {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    .user-dropdown {
+        width: 100%;
+    }
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* Make it 1 column on smaller screens */
+    }
+}
+
+/* Form Wrapper - Centers the form */
+.form-wrapper {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically if needed */
+    width: 100%;
+    right: 100vh; /* Makes sure it takes the full viewport height */
+    display: flex;
+}
+
+/* Form Container - Centered */
+.input-section {
+    grid-column: 2 / 3; /* Places Box 9 in a separate row */
+    width: 100%;
+    max-width: 600px; /* Adjust width */
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f4f4f4;
+    margin: 0 auto; /* Centers the form horizontally */
+}
+
+/* Flex container for label & input */
+.input-group {
+    display: flex;
+    align-items: left;
+    margin-bottom: 15px;
+    justify-content: left;
+    
+}
+
+/* Label styling */
+label {
+    font-weight: bold;
+    color: #3b3b3b;
+    min-width: 150px; /* Fixed width for labels */
+    text-align: left;
+    margin-right: 15px; /* Add right margin for spacing */
+}
+
+/* Input field styling */
+.user-input {
+    flex: 1; /* Take up remaining space */
+    padding: 10px;
+    border: 2px solid #6a7074b7;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-wrapper {
+        justify-content: center; /* Center on small screens */
+    }
+
+    .input-section {
+        width: 90%;
+        margin: 0 auto;
+    }
+}
+
+
+/* Fix Row 1 background issue */
+.box:nth-child(9) .row:first-child {
+    background-color: #12753E; /* Background color */
+    font-weight: bold;
+    color: #f3f3f3;
+    padding: 10px;
+    font-size: 14px;
+    min-height: 40px; /* Prevents collapsing */
+    width: 100%; /* Ensures full width */
+    text-align: center; /* Centers text */
+    display: block; /* Ensures it behaves as a block element */
+}   
+.button-container {
+    display: flex;
+    justify-content: center; /* Centering buttons */
+    align-items: center; /* Aligns vertically */
+    gap: 15px; /* Spacing between buttons */
+    margin: 20px auto; /* Centers the container */
+    position: relative;
+    top: -10px; /* Adjust this value to move buttons up */
+}
+
+/* Base styling for both buttons */
+.prev-btn, .next-btn {
+    background-color: #12753E; /* Deep Blue */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px; /* Ensures uniform button width */
+    text-align: center;
+}
+
+/* Hover effect */
+.prev-btn:hover, .next-btn:hover {
+    background-color: #1b834a; /* Darker Blue */
+    transform: scale(1.05);
+}
+
+/* Active effect */
+.prev-btn:active, .next-btn:active {
+    background-color: #30a163;
+    transform: scale(0.98);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column; /* Stack buttons on smaller screens */
+        align-items: center;
+        top: 0; /* Adjust for smaller screens */
+    }
+    
+    .prev-btn, .next-btn {
+        width: 80%; /* Adjust width for mobile */
+    }
+}
+

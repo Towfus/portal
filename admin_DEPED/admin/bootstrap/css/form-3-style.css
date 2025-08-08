@@ -1,0 +1,99 @@
+
+/* Form specific styles - these complement the sidebar-style.css */
+.content-container {
+    padding: 20px;
+    text-align: left;
+    overflow-y: auto;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding: 50px;
+}
+
+.form-title {
+    background-color: #283593;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 7px;
+}
+
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+input[type="text"], input[type="date"], textarea {
+    width: 60%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centering buttons */
+    align-items: center; /* Aligns vertically */
+    gap: 15px; /* Spacing between buttons */
+    margin: 20px auto; /* Centers the container */
+    position: relative;
+    top: -10px; /* Adjust this value to move buttons up */
+}
+
+/* Base styling for both buttons */
+.prev-btn, .next-btn {
+    background-color: #12753E; /* Deep Blue */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px; /* Ensures uniform button width */
+    text-align: center;
+}
+
+/* Hover effect */
+.prev-btn:hover, .next-btn:hover {
+    background-color: #1b834a; /* Darker Blue */
+    transform: scale(1.05);
+}
+
+/* Active effect */
+.prev-btn:active, .next-btn:active {
+    background-color: #30a163;
+    transform: scale(0.98);
+}
+
+.success-message {
+    background-color: #dff0d8;
+    color: #3c763d;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.error-message {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}

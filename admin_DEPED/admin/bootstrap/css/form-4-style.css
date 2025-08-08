@@ -1,0 +1,119 @@
+
+.form-container {
+    padding: 20px;
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: #304f9e;
+    color: white;
+    text-align: center;
+}
+
+.strengths-column, .dev-needs-column, .action-plan-column, .timeline-column, .resources-column {
+    background-color: #1e7e34;
+    color: white;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    box-sizing: border-box;
+    border: none;
+    resize: vertical;
+}
+
+.editable-field {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.signature-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.signature-block {
+    text-align: center;
+    width: 30%;
+    padding: 0 10px;
+}
+
+.signature-line {
+    border-bottom: 1px solid #000;
+    margin: 5px 0;
+    padding-bottom: 5px;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+label {
+    font-weight: bold;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centering buttons */
+    align-items: center; /* Aligns vertically */
+    gap: 15px; /* Spacing between buttons */
+    margin: 20px auto; /* Centers the container */
+    position: relative;
+    top: -10px; /* Adjust this value to move buttons up */
+}
+
+/* Base styling for both buttons */
+.prev-btn, .next-btn {
+    background-color: #12753E; /* Deep Blue */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px; /* Ensures uniform button width */
+    text-align: center;
+    margin-top: 70px;
+}
+
+/* Hover effect */
+.prev-btn:hover, .next-btn:hover {
+    background-color: #1b834a; /* Darker Blue */
+    transform: scale(1.05);
+}
+
+/* Active effect */
+.prev-btn:active, .next-btn:active {
+    background-color: #30a163;
+    transform: scale(0.98);
+}
+
+/* Additional styles for compatibility with sidebar */
+.content-container {
+    padding: 20px;
+    text-align: left;
+    overflow-y: auto;
+    height: calc(100vh - 80px);
+}

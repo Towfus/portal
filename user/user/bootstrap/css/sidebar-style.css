@@ -1,0 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root{
+    --primary-bg: #ffffff;
+    --sidebar-color: #2b3a8f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.main {
+    min-height: 100vh;
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+    transition: all 0.35s ease-in-out;
+    background-color: var(--primary-bg);
+}
+
+#sidebar {
+    width: 70px;
+    min-width: 70px;
+    z-index: 1000;
+    transition: all .25s ease-in-out;
+    background-color: var(--sidebar-color);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    flex-shrink: 0;
+}
+
+#sidebar.expand {
+    width: 260px;
+    min-width: 260px;
+}
+
+#toggle-btn {
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+    padding: 1rem 1.5rem;
+    color: #FFF;
+}
+
+#toggle-btn i {
+    font-size: 1.5rem;
+    color: #FFF;
+}
+
+.sidebar-logo {
+    margin: auto 0;
+}
+
+/* .sidebar-logo a {
+    color: #FFF;
+    font-size: 1.15rem;
+    font-weight: 600;
+} */
+
+#sidebar:not(.expand) .sidebar-logo,
+#sidebar:not(.expand) a.sidebar-link span {
+    display: none;
+}
+
+.sidebar-nav {
+    padding: 2rem 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+a.sidebar-link {
+    padding: .625rem 1.625rem;
+    color: #FFF;
+    display: block;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-link i {
+    font-size: 1.1rem;
+    margin-right: .75rem;
+}
+
+a.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, .075);
+    border-left: 8px solid rgba(24, 138, 65, 0.8);
+}
+a.sidebar-link:focus {
+    background-color: rgba(255, 255, 255, .075);
+    border-left: 8px solid rgba(24, 138, 65, 0.8);
+}
+
+.sidebar-item {
+    position: relative;
+}
+
+#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
+    position: absolute;
+    top: 0;
+    left: 70px;
+    background-color: #0e2238;
+    padding: 0;
+    min-width: 15rem;
+    display: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
+    display: block;
+    max-height: 15em;
+    width: 100%;
+    opacity: 1;
+}
+
+.sidebar-dropdown .sidebar-link {
+    padding-left: 2.5rem;
+}
+
+.sidebar-dropdown .sidebar-dropdown .sidebar-link {
+    padding-left: 3.5rem;
+}
+
+#sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
+    border: solid;
+    border-width: 0 .075rem .075rem 0;
+    content: "";
+    display: inline-block;
+    padding: 2px;
+    position: absolute;
+    right: 1.5rem;
+    top: 1.4rem;
+    transform: rotate(-135deg);
+    transition: all .2s ease-out;
+}
+
+#sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+    transform: rotate(45deg);
+    transition: all .2s ease-out;
+}
+
+.sidebar-footer {
+    position: relative;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Fix dropdown behavior */
+#sidebar.expand .sidebar-dropdown {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;
+}
+
+#sidebar.expand .sidebar-dropdown.show {
+    max-height: 1000px;
+    transition: max-height 0.25s ease-in;
+}
+
+.top-navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,.08);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 75px;
+    margin-right: 15px;
+}
+
+.navbar-titles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.navbar-titles h4 {
+    margin: 0;
+    font-weight: 600;
+    color: #0e2238;
+}
+
+.navbar-titles h5 {
+    margin: 0;
+    font-weight: 400;
+    color: rgba(24, 138, 65, 0.8);
+}
+
+.main-with-navbar {
+    padding-top: 0 !important;
+    width: 100%;
+}
+
+.content-container {
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Container adjustments to maximize width */
+.container, 
+.container-fluid {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Adjustments for cards to use full width */
+.card {
+    border: none;
+    width: 100%;
+}
+
+/* Make the main element take all available space */
+.main {
+    flex-grow: 1;
+    width: calc(100% - 70px);
+}
+
+#sidebar.expand + .main {
+    width: calc(100% - 260px);
+}

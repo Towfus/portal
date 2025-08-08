@@ -1,0 +1,192 @@
+.employee-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.info-group {
+    margin-bottom: 10px;
+}
+
+.info-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.info-value {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.ipcrf-table {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.ipcrf-table table {
+    min-width: 1200px;
+    border-collapse: collapse;
+}
+
+h2 {
+    margin-top: 30px;
+}
+
+.ipcrf-table th, .ipcrf-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    vertical-align: middle;
+}
+
+.ipcrf-table th {
+    background-color: lightblue;
+    text-align: center;
+    font-weight: bold;
+}
+
+.vertical-text {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    text-align: center;
+    height: 150px;
+}
+
+.rating-cell input {
+    width: 50px;
+    text-align: center;
+}
+
+.editable {
+    background-color: #e8f4f8;
+}
+
+.performance-level {
+    text-align: center;
+    font-weight: bold;
+}
+
+.level-5 {
+    background-color: #28a745;
+    color: white;
+}
+
+.level-4 {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.level-3 {
+    background-color: #ffc107;
+}
+
+.level-2 {
+    background-color: #fd7e14;
+}
+
+.level-1 {
+    background-color: #dc3545;
+    color: white;
+}
+
+.computation-section {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.rating-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.rating-category {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.final-rating {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Added styles for edit mode */
+.edit-mode .editable {
+    border: 1px dashed #007bff;
+    background-color: #f0f8ff;
+}
+
+.controls-panel {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centering buttons */
+    align-items: center; /* Aligns vertically */
+    gap: 15px; /* Spacing between buttons */
+    margin: 20px auto; /* Centers the container */
+    position: relative;
+    top: -10px; /* Adjust this value to move buttons up */
+}
+
+.prev-btn, .next-btn {
+    background-color: #12753E; /* Deep Green */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px; /* Ensures uniform button width */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Hover effect */
+.prev-btn:hover, .next-btn:hover {
+    background-color: #1b834a; /* Darker Green */
+    transform: scale(1.05);
+}
+
+/* Active effect */
+.prev-btn:active, .next-btn:active {
+    background-color: #30a163; /* Lighter Green */
+    transform: scale(0.98);
+}
+
+@media (max-width: 768px) {
+    .employee-info {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .employee-info > div {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .rating-summary {
+        flex-direction: column;
+    }
+}
