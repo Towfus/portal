@@ -95,58 +95,74 @@ class UserProcessViewer {
                 ]
             ];
         }
-
-        if (file_exists('user_header.php')) {
-            include 'user_header.php';
-        }
         
         $this->renderHTML($processData, $errorMessage ?? null);
+
     }
 
     private function renderHTML($processData, $errorMessage) {
+                include 'user_header.php';
         ?>
         <!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title><?php echo isset($pageTitle) ? $pageTitle . ' - ' : ''; ?>DepEd General Trias City - Process Flow Guide</title>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+            <title>Process Flow Guide - DepEd General Trias City</title>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
             <style>
+                :root {
+                    --primary-green: #22c55e;
+                    --light-green: #86efac;
+                    --pale-green: #f0fdf4;
+                    --dark-green: #16a34a;
+                    --accent-green: #4ade80;
+                    --text-dark: #1f2937;
+                    --text-light: #6b7280;
+                    --white: #ffffff;
+                    --gray-50: #f9fafb;
+                    --gray-100: #f3f4f6;
+                    --gray-200: #e5e7eb;
+                    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+                    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+                    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+                }
+
                 * {
+                    margin: 0;
+                    padding: 0;
                     box-sizing: border-box;
                 }
                 
                 body {
                     font-family: 'Inter', sans-serif;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, var(--pale-green) 0%, var(--gray-50) 100%);
                     min-height: 100vh;
-                    margin: 0;
-                    padding: 20px;
-                    color: #333;
+                    color: var(--text-dark);
+                    line-height: 1.6;
                 }
                 
                 .main-container {
                     max-width: 1200px;
                     margin: 0 auto;
-                    background: rgba(255, 255, 255, 0.95);
-                    border-radius: 20px;
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-                    backdrop-filter: blur(10px);
-                    overflow: hidden;
+                    padding: 20px;
                 }
                 
-                .header {
-                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                    color: white;
-                    padding: 2rem;
+                .welcome-banner {
+                    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+                    color: var(--white);
+                    padding: 3rem 2rem;
+                    border-radius: 20px;
+                    margin-bottom: 2rem;
                     text-align: center;
                     position: relative;
+                    overflow: hidden;
+                    box-shadow: var(--shadow-xl);
                 }
                 
-                .header::before {
+                .welcome-banner::before {
                     content: '';
                     position: absolute;
                     top: 0;
@@ -156,96 +172,121 @@ class UserProcessViewer {
                     background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.1"><circle cx="30" cy="30" r="2"/></g></svg>') repeat;
                 }
                 
-                .header h1 {
-                    margin: 0;
+                .welcome-content {
+                    position: relative;
+                    z-index: 2;
+                }
+                
+                .welcome-banner h1 {
                     font-size: 2.5rem;
                     font-weight: 700;
-                    position: relative;
-                    z-index: 1;
-                }
-                
-                .header p {
-                    margin: 0.5rem 0 0 0;
-                    font-size: 1.1rem;
-                    opacity: 0.9;
-                    position: relative;
-                    z-index: 1;
-                }
-                
-                .process-navigation {
-                    padding: 1.5rem 2rem;
-                    background: #f8fafc;
-                    border-bottom: 1px solid #e2e8f0;
-                }
-                
-                .process-tabs {
-                    display: flex;
-                    gap: 0.5rem;
-                    flex-wrap: wrap;
                     margin-bottom: 1rem;
                 }
                 
-                .process-tab {
-                    padding: 0.75rem 1.5rem;
-                    border-radius: 12px;
-                    background: white;
-                    border: 2px solid #e2e8f0;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    font-weight: 500;
-                    color: #64748b;
-                    flex: 1;
-                    min-width: 200px;
+                .welcome-banner p {
+                    font-size: 1.125rem;
+                    opacity: 0.95;
+                    max-width: 600px;
+                    margin: 0 auto;
+                }
+                
+                .process-card {
+                    background: var(--white);
+                    border-radius: 20px;
+                    box-shadow: var(--shadow-lg);
+                    overflow: hidden;
+                    margin-bottom: 2rem;
+                    border: 1px solid var(--gray-100);
+                }
+                
+                .card-header {
+                    background: linear-gradient(135deg, var(--light-green) 0%, var(--accent-green) 100%);
+                    padding: 2rem;
                     text-align: center;
                 }
                 
+                .card-header h2 {
+                    font-size: 1.75rem;
+                    font-weight: 600;
+                    color: var(--text-dark);
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.75rem;
+                }
+                
+                .process-navigation {
+                    padding: 2rem;
+                    background: var(--gray-50);
+                    border-bottom: 1px solid var(--gray-200);
+                }
+                
+                .process-tabs {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 1rem;
+                    margin-bottom: 2rem;
+                }
+                
+                .process-tab {
+                    padding: 1.25rem 1.5rem;
+                    border-radius: 16px;
+                    background: var(--white);
+                    border: 2px solid transparent;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    font-weight: 500;
+                    color: var(--text-dark);
+                    text-align: center;
+                    box-shadow: var(--shadow-sm);
+                }
+                
                 .process-tab:hover {
-                    border-color: #3b82f6;
-                    color: #3b82f6;
+                    border-color: var(--primary-green);
                     transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+                    box-shadow: var(--shadow-md);
                 }
                 
                 .process-tab.active {
-                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                    color: white;
-                    border-color: #3b82f6;
+                    background: var(--primary-green);
+                    color: var(--white);
+                    border-color: var(--primary-green);
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+                    box-shadow: var(--shadow-lg);
                 }
                 
                 .path-selector {
                     display: flex;
-                    background: white;
-                    border-radius: 12px;
+                    background: var(--white);
+                    border-radius: 16px;
                     padding: 0.5rem;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    box-shadow: var(--shadow-sm);
                     max-width: 400px;
                     margin: 0 auto;
+                    border: 1px solid var(--gray-200);
                 }
                 
                 .path-button {
                     flex: 1;
-                    padding: 0.75rem 1rem;
+                    padding: 1rem 1.25rem;
                     border: none;
-                    border-radius: 8px;
+                    border-radius: 12px;
                     font-weight: 500;
                     cursor: pointer;
                     transition: all 0.3s ease;
                     background: transparent;
-                    color: #64748b;
+                    color: var(--text-light);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
                 }
                 
-                .path-button.compliant.active {
-                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-                    color: white;
-                    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-                }
-                
-                .path-button.non-compliant.active {
-                    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                    color: white;
-                    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+                .path-button.active {
+                    background: var(--primary-green);
+                    color: var(--white);
+                    box-shadow: var(--shadow-sm);
                 }
                 
                 .content-area {
@@ -257,21 +298,22 @@ class UserProcessViewer {
                     margin-bottom: 2rem;
                 }
                 
-                .process-title h2 {
+                .process-title h3 {
                     font-size: 2rem;
                     font-weight: 700;
-                    color: #1e293b;
-                    margin: 0 0 0.5rem 0;
+                    color: var(--text-dark);
+                    margin: 0;
                 }
                 
                 .process-announcement {
                     background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-                    color: white;
+                    color: var(--white);
                     padding: 1.5rem;
-                    border-radius: 12px;
+                    border-radius: 16px;
                     margin-bottom: 2rem;
                     position: relative;
                     overflow: hidden;
+                    box-shadow: var(--shadow-md);
                 }
                 
                 .process-announcement::before {
@@ -284,56 +326,56 @@ class UserProcessViewer {
                     background: url('data:image/svg+xml,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.1"><circle cx="20" cy="20" r="1.5"/></g></svg>') repeat;
                 }
                 
-                .process-announcement h3 {
+                .announcement-content {
+                    position: relative;
+                    z-index: 1;
+                }
+                
+                .announcement-content h4 {
                     margin: 0 0 1rem 0;
                     font-size: 1.25rem;
                     font-weight: 600;
-                    position: relative;
-                    z-index: 1;
                     display: flex;
                     align-items: center;
                     gap: 0.5rem;
                 }
                 
-                .process-announcement p {
+                .announcement-content p {
                     margin: 0;
-                    line-height: 1.6;
-                    position: relative;
-                    z-index: 1;
                     font-weight: 500;
                 }
                 
                 .steps-container {
-                    background: white;
-                    border-radius: 16px;
+                    background: var(--white);
+                    border-radius: 20px;
                     padding: 2rem;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-                    border: 1px solid #e2e8f0;
+                    box-shadow: var(--shadow-md);
+                    border: 1px solid var(--gray-100);
                 }
                 
                 .steps-header {
                     text-align: center;
                     margin-bottom: 2rem;
                     padding-bottom: 1rem;
-                    border-bottom: 2px solid #e2e8f0;
+                    border-bottom: 2px solid var(--gray-100);
                 }
                 
-                .steps-header h3 {
+                .steps-header h4 {
                     font-size: 1.5rem;
                     font-weight: 600;
                     margin: 0;
-                    color: #1e293b;
+                    color: var(--text-dark);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     gap: 0.5rem;
                 }
                 
-                .steps-header .compliant-icon {
-                    color: #10b981;
+                .compliant-icon {
+                    color: var(--primary-green);
                 }
                 
-                .steps-header .non-compliant-icon {
+                .non-compliant-icon {
                     color: #ef4444;
                 }
                 
@@ -347,11 +389,11 @@ class UserProcessViewer {
                 .flow-step::before {
                     content: '';
                     position: absolute;
-                    left: 25px;
-                    top: 60px;
+                    left: 30px;
+                    top: 70px;
                     bottom: -20px;
                     width: 2px;
-                    background: linear-gradient(to bottom, #e2e8f0, transparent);
+                    background: linear-gradient(to bottom, var(--light-green), transparent);
                 }
                 
                 .flow-step:last-child::before {
@@ -359,18 +401,18 @@ class UserProcessViewer {
                 }
                 
                 .step-number {
-                    width: 50px;
-                    height: 50px;
-                    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-                    color: white;
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, var(--primary-green) 0%, var(--dark-green) 100%);
+                    color: var(--white);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     font-weight: 700;
-                    font-size: 1.125rem;
+                    font-size: 1.25rem;
                     margin-right: 1.5rem;
-                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                    box-shadow: var(--shadow-md);
                     flex-shrink: 0;
                     position: relative;
                     z-index: 1;
@@ -378,75 +420,101 @@ class UserProcessViewer {
                 
                 .step-content {
                     flex: 1;
-                    background: #f8fafc;
+                    background: var(--pale-green);
                     padding: 1.5rem;
-                    border-radius: 12px;
-                    border-left: 4px solid #3b82f6;
+                    border-radius: 16px;
+                    border-left: 4px solid var(--primary-green);
                     transition: all 0.3s ease;
+                    box-shadow: var(--shadow-sm);
                 }
                 
                 .step-content:hover {
-                    background: #f1f5f9;
+                    background: var(--light-green);
                     transform: translateX(4px);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    box-shadow: var(--shadow-md);
                 }
                 
                 .step-title {
                     font-size: 1.25rem;
                     font-weight: 600;
-                    color: #1e293b;
+                    color: var(--text-dark);
                     margin: 0 0 0.75rem 0;
                 }
                 
                 .step-description {
-                    color: #475569;
-                    line-height: 1.6;
+                    color: var(--text-light);
                     margin: 0;
                 }
                 
                 .no-steps {
                     text-align: center;
-                    color: #64748b;
-                    font-style: italic;
-                    padding: 3rem;
-                    background: #f8fafc;
-                    border-radius: 12px;
-                    border: 2px dashed #cbd5e1;
+                    color: var(--text-light);
+                    padding: 4rem 2rem;
+                    background: var(--gray-50);
+                    border-radius: 16px;
+                    border: 2px dashed var(--gray-200);
+                }
+                
+                .no-steps i {
+                    font-size: 3rem;
+                    margin-bottom: 1rem;
+                    opacity: 0.5;
+                    color: var(--primary-green);
                 }
                 
                 .error-message {
                     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                    color: white;
-                    padding: 1rem;
+                    color: var(--white);
+                    padding: 1rem 1.5rem;
                     border-radius: 12px;
-                    margin: 1rem 0;
+                    margin-bottom: 2rem;
                     text-align: center;
                     font-weight: 500;
+                    box-shadow: var(--shadow-md);
+                }
+                
+                .fade-in {
+                    animation: fadeInUp 0.6s ease forwards;
+                }
+                
+                @keyframes fadeInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(30px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
                 
                 @media (max-width: 768px) {
-                    body {
+                    .main-container {
                         padding: 10px;
                     }
                     
-                    .header h1 {
+                    .welcome-banner {
+                        padding: 2rem 1rem;
+                    }
+                    
+                    .welcome-banner h1 {
                         font-size: 2rem;
                     }
                     
-                    .process-tabs {
-                        flex-direction: column;
+                    .process-navigation {
+                        padding: 1.5rem;
                     }
                     
-                    .process-tab {
-                        min-width: auto;
+                    .process-tabs {
+                        grid-template-columns: 1fr;
                     }
                     
                     .content-area {
-                        padding: 1rem;
+                        padding: 1.5rem;
                     }
                     
                     .steps-container {
-                        padding: 1rem;
+                        padding: 1.5rem;
                     }
                     
                     .flow-step {
@@ -461,81 +529,80 @@ class UserProcessViewer {
                     }
                     
                     .flow-step::before {
-                        left: 25px;
-                        top: 70px;
+                        left: 30px;
+                        top: 80px;
                     }
-                }
-                
-                .loading {
-                    text-align: center;
-                    padding: 3rem;
-                    color: #64748b;
-                }
-                
-                .loading i {
-                    font-size: 2rem;
-                    animation: spin 1s linear infinite;
-                }
-                
-                @keyframes spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
+                    
+                    .path-selector {
+                        flex-direction: column;
+                        gap: 0.5rem;
+                        padding: 1rem;
+                    }
+                    
+                    .path-button {
+                        border-radius: 12px;
+                    }
                 }
             </style>
         </head>
         <body>
             <div class="main-container">
-                <div class="header">
-                    <h1><i class="fas fa-route mr-3"></i>Process Flow Guide</h1>
-                    <p>Step-by-step guide for DepEd processes and requirements</p>
-                </div>
-                
                 <?php if (isset($errorMessage)): ?>
-                    <div class="error-message">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <div class="error-message fade-in">
+                        <i class="fas fa-exclamation-triangle"></i>
                         <?php echo htmlspecialchars($errorMessage); ?>
                     </div>
                 <?php endif; ?>
                 
-                <div class="process-navigation">
-                    <div class="process-tabs" id="processTabs">
-                        <?php foreach ($processData as $processId => $process): ?>
-                        <div class="process-tab <?php echo ($processId === array_key_first($processData)) ? 'active' : ''; ?>" 
-                             data-process="<?php echo htmlspecialchars($processId); ?>">
-                            <?php echo htmlspecialchars($process['description']); ?>
-                        </div>
-                        <?php endforeach; ?>
+                <div class="process-card fade-in">
+                    <div class="card-header">
+                        <h2>
+                            <i class="fas fa-clipboard-list"></i>
+                            Select Process Type
+                        </h2>
                     </div>
                     
-                    <div class="path-selector">
-                        <button class="path-button compliant active" data-path="compliant">
-                            <i class="fas fa-check-circle mr-2"></i>Compliant Path
-                        </button>
-                        <button class="path-button non-compliant" data-path="nonCompliant">
-                            <i class="fas fa-exclamation-circle mr-2"></i>Non-Compliant Path
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="content-area">
-                    <div class="process-title">
-                        <h2 id="processTitle">Loading...</h2>
-                    </div>
-                    
-                    <div id="announcementContainer" style="display: none;"></div>
-                    
-                    <div class="steps-container">
-                        <div class="steps-header">
-                            <h3 id="stepsHeader">
-                                <i class="fas fa-check-circle compliant-icon"></i>
-                                <span>Compliant Process Steps</span>
-                            </h3>
+                    <div class="process-navigation">
+                        <div class="process-tabs" id="processTabs">
+                            <?php foreach ($processData as $processId => $process): ?>
+                            <div class="process-tab <?php echo ($processId === array_key_first($processData)) ? 'active' : ''; ?>" 
+                                 data-process="<?php echo htmlspecialchars($processId); ?>">
+                                <i class="fas fa-file-alt"></i>
+                                <?php echo htmlspecialchars($process['description']); ?>
+                            </div>
+                            <?php endforeach; ?>
                         </div>
                         
-                        <div id="stepsList">
-                            <div class="loading">
-                                <i class="fas fa-spinner"></i>
-                                <p>Loading process steps...</p>
+                        <div class="path-selector">
+                            <button class="path-button active" data-path="compliant">
+                                <i class="fas fa-check-circle"></i>Compliant Path
+                            </button>
+                            <button class="path-button" data-path="nonCompliant">
+                                <i class="fas fa-exclamation-circle"></i>Non-Compliant Path
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="content-area">
+                        <div class="process-title">
+                            <h3 id="processTitle">Loading...</h3>
+                        </div>
+                        
+                        <div id="announcementContainer" style="display: none;"></div>
+                        
+                        <div class="steps-container">
+                            <div class="steps-header">
+                                <h4 id="stepsHeader">
+                                    <i class="fas fa-check-circle compliant-icon"></i>
+                                    <span>Compliant Process Steps</span>
+                                </h4>
+                            </div>
+                            
+                            <div id="stepsList">
+                                <div class="no-steps">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <p>Loading process steps...</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -544,20 +611,21 @@ class UserProcessViewer {
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Store the process data
                     const processData = <?php echo json_encode($processData); ?>;
-                    
-                    // Current state variables
                     let currentProcessId = Object.keys(processData)[0];
                     let currentPathType = 'compliant';
-
-                    // Initialize the page
-                    initializePage();
 
                     function initializePage() {
                         updateProcessTitle();
                         updateProcessAnnouncement();
                         loadProcessSteps();
+                        
+                        // Add staggered animation to elements
+                        setTimeout(() => {
+                            document.querySelectorAll('.process-tab').forEach((tab, index) => {
+                                tab.style.animation = `fadeInUp 0.5s ease ${index * 0.1}s both`;
+                            });
+                        }, 300);
                     }
 
                     function updateProcessTitle() {
@@ -572,8 +640,10 @@ class UserProcessViewer {
                         if (process.announcement && process.announcement.trim() !== '') {
                             announcementContainer.innerHTML = `
                                 <div class="process-announcement">
-                                    <h3><i class="fas fa-bullhorn"></i> Important Announcement</h3>
-                                    <p>${process.announcement}</p>
+                                    <div class="announcement-content">
+                                        <h4><i class="fas fa-bullhorn"></i> Important Announcement</h4>
+                                        <p>${process.announcement}</p>
+                                    </div>
                                 </div>
                             `;
                             announcementContainer.style.display = 'block';
@@ -587,7 +657,6 @@ class UserProcessViewer {
                         const stepsList = document.getElementById('stepsList');
                         const stepsHeader = document.getElementById('stepsHeader');
                         
-                        // Update header based on path type
                         if (currentPathType === 'compliant') {
                             stepsHeader.innerHTML = `
                                 <i class="fas fa-check-circle compliant-icon"></i>
@@ -603,8 +672,9 @@ class UserProcessViewer {
                         if (steps.length === 0) {
                             stepsList.innerHTML = `
                                 <div class="no-steps">
-                                    <i class="fas fa-info-circle mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
-                                    <p>No steps have been configured for this process path yet.</p>
+                                    <i class="fas fa-info-circle"></i>
+                                    <h5>No Steps Available</h5>
+                                    <p>No steps have been configured for this process path yet. Please check back later or contact support.</p>
                                 </div>
                             `;
                             return;
@@ -613,10 +683,10 @@ class UserProcessViewer {
                         let stepsHTML = '';
                         steps.forEach((step, index) => {
                             stepsHTML += `
-                                <div class="flow-step">
+                                <div class="flow-step" style="animation: fadeInUp 0.5s ease ${index * 0.1}s both;">
                                     <div class="step-number">${index + 1}</div>
                                     <div class="step-content">
-                                        <h4 class="step-title">${step.title}</h4>
+                                        <h5 class="step-title">${step.title}</h5>
                                         <p class="step-description">${step.description}</p>
                                     </div>
                                 </div>
@@ -626,13 +696,12 @@ class UserProcessViewer {
                         stepsList.innerHTML = stepsHTML;
                     }
 
-                    // Process tab click handlers
+                    // Event listeners
                     document.querySelectorAll('.process-tab').forEach(tab => {
                         tab.addEventListener('click', function() {
                             const processId = this.getAttribute('data-process');
                             currentProcessId = processId;
                             
-                            // Update UI
                             document.querySelectorAll('.process-tab').forEach(t => t.classList.remove('active'));
                             this.classList.add('active');
                             
@@ -642,13 +711,11 @@ class UserProcessViewer {
                         });
                     });
 
-                    // Path button click handlers
                     document.querySelectorAll('.path-button').forEach(button => {
                         button.addEventListener('click', function() {
                             const pathType = this.getAttribute('data-path');
                             currentPathType = pathType;
                             
-                            // Update UI
                             document.querySelectorAll('.path-button').forEach(b => b.classList.remove('active'));
                             this.classList.add('active');
                             
@@ -656,19 +723,8 @@ class UserProcessViewer {
                         });
                     });
 
-                    // Add smooth scrolling for better UX
-                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                        anchor.addEventListener('click', function (e) {
-                            e.preventDefault();
-                            const target = document.querySelector(this.getAttribute('href'));
-                            if (target) {
-                                target.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'start'
-                                });
-                            }
-                        });
-                    });
+                    // Initialize page
+                    initializePage();
                 });
             </script>
         </body>
