@@ -72,7 +72,7 @@ include 'user_header.php';
 
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, rgba(30, 126, 52, 0.9), rgba(40, 167, 69, 0.9)),
+              background: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%),
                         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.1"><polygon points="0,100 1000,0 1000,100"/></svg>');
             background-size: cover;
             color: white;

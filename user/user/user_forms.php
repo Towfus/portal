@@ -494,12 +494,6 @@ include 'user_header.php';
                         </p>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="stats-card">
-                        <div class="stats-number"><?php echo $totalFiles; ?></div>
-                        <div>Available Forms</div>
-                    </div>
-                </div>
             </div>
         </div>
         

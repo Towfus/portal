@@ -264,6 +264,10 @@ class ProcessManager {
         $pathResult = $stmt->get_result();
         
         while ($pathRow = $pathResult->fetch_assoc()) {
+            // Initialize the path array if it doesn't exist
+            if (!isset($processData[$pathRow['path_type']])) {
+                $processData[$pathRow['path_type']] = [];
+            }
             $this->loadProcessSteps($pathRow['path_id'], $pathRow['path_type'], $processData);
         }
     }
