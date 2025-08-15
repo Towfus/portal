@@ -19,11 +19,52 @@ if ($result->num_rows > 0) {
     }
 }
 
+// Fetch all banners
+$banner_sql = "SELECT * FROM banners ORDER BY created_at DESC";
+$banner_result = $conn->query($banner_sql);
+
+
+$all_banners = [];
+if ($banner_result->num_rows > 0) {
+    while($row = $banner_result->fetch_assoc()) {
+        // Fix the banner path for user access
+        $banner_path = $row['banner_path'];
+        
+        // Try different possible path combinations
+        $possible_paths = [
+            $banner_path, // original path from database
+            'admin_deped/' . $banner_path, // try with admin_deped prefix
+            str_replace('../', 'admin_deped/', $banner_path), // replace ../ with admin_deped/
+            'admin_deped/banners/' . basename($banner_path) // direct path to banners folder
+        ];
+        
+        $found = false;
+        foreach ($possible_paths as $path) {
+            if (file_exists($path)) {
+                $banner_path = $path;
+                $found = true;
+                break;
+            }
+        }
+        
+        if (!$found) {
+            // If no path works, use a placeholder image
+            $banner_path = 'assets/images/banner-placeholder.jpg';
+        }
+        
+        $row['banner_path'] = $banner_path;
+        $all_banners[] = $row;
+    }
+}
+
 // Get total announcements count
 $totalAnnouncements = count($all_announcements);
 $activeAnnouncements = count(array_filter($all_announcements, function($announcement) {
     return $announcement['is_active'] == 1;
 }));
+
+// Get total banners count
+$totalBanners = count($all_banners);
 
 $conn->close();
 include 'user_header.php';
@@ -134,6 +175,43 @@ include 'user_header.php';
             opacity: 0.9;
         }
 
+        /* Navigation Tabs */
+        .nav-tabs-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: 2px solid var(--border-color);
+            background: white;
+            color: var(--text-dark);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab:hover,
+        .nav-tab.active {
+            background: var(--gradient);
+            border-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
         /* Search and Filter Section */
         .filter-section {
             background: white;
@@ -200,6 +278,126 @@ include 'user_header.php';
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Banner Grid */
+        .banners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .banner-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .banner-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0,0,0,0.15);
+        }
+
+        .banner-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .banner-error {
+            width: 100%;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            color: #6c757d;
+            padding: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .banner-error::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #e74c3c;
+        }
+
+        .banner-info {
+            padding: 1.5rem;
+        }
+
+        .banner-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+            color: white;
+        }
+
+        .view-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--info-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .view-btn:hover {
+            background: #2980b9;
+            color: white;
+            transform: translateY(-2px);
         }
 
         /* Announcements Grid */
@@ -297,47 +495,63 @@ include 'user_header.php';
             gap: 0.5rem;
         }
 
-        .announcement-actions {
-            margin-left: auto;
-        }
-
-        .action-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            border: none;
-            background: var(--gradient);
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-            color: white;
-        }
-
-        /* Priority Indicators */
-        .announcement-card::before {
-            content: '';
-            position: absolute;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
             left: 0;
             top: 0;
-            width: 5px;
+            width: 100%;
             height: 100%;
-            background: var(--secondary-color);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
         }
 
-        .announcement-card.priority::before {
-            opacity: 1;
-            background: linear-gradient(180deg, var(--warning-color), var(--danger-color));
+        .modal-content {
+            position: relative;
+            margin: 2% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .modal-close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         /* Empty State */
@@ -437,45 +651,23 @@ include 'user_header.php';
                 align-items: flex-start;
             }
 
-            .announcement-actions {
-                margin-left: 0;
-                align-self: flex-end;
+            .nav-tabs-container {
+                padding: 0.5rem;
             }
-        }
 
-        /* Loading Animation */
-        .loading-shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
+            .nav-tab {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
             }
-            100% {
-                background-position: 200% 0;
+
+            .banners-grid {
+                grid-template-columns: 1fr;
             }
-        }
 
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--secondary-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-color);
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
         }
 
         /* Floating Action Button */
@@ -511,62 +703,197 @@ include 'user_header.php';
             <div class="hero-content">
                 <h1 class="display-5 fw-bold mb-3">
                     <i class="fas fa-bullhorn me-3"></i>
-                    Official Announcements
+                    DepEd General Trias City Hub
                 </h1>
                 <p class="lead mb-0">
-                    Stay updated with the latest news, events, and important information from DepEd General Trias City. 
-                    All official announcements and notices are published here for your reference.
+                    Your central hub for official announcements, banners, and important updates from DepEd General Trias City. 
+                    Stay informed with the latest news and downloadable resources.
                 </p>
+                
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <span class="stats-number"><?php echo $totalAnnouncements; ?></span>
+                        <div class="stats-label">Total Announcements</div>
+                    </div>
+                    <div class="stats-card">
+                        <span class="stats-number"><?php echo $activeAnnouncements; ?></span>
+                        <div class="stats-label">Active Announcements</div>
+                    </div>
+                    <div class="stats-card">
+                        <span class="stats-number"><?php echo $totalBanners; ?></span>
+                        <div class="stats-label">Available Banners</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Announcements Grid -->
-        <div class="announcements-grid fade-in">
-            <?php if (!empty($all_announcements)): ?>
-                <?php foreach ($all_announcements as $index => $announcement): ?>
-                    <div class="announcement-card" 
-                         data-status="<?php echo $announcement['is_active'] ? 'active' : 'inactive'; ?>"
-                         style="animation-delay: <?php echo $index * 0.1; ?>s">
-                        
-                        <div class="announcement-header">
-                            <div class="announcement-status <?php echo $announcement['is_active'] ? 'status-active' : 'status-inactive'; ?>">
-                                <i class="fas <?php echo $announcement['is_active'] ? 'fa-check-circle' : 'fa-pause-circle'; ?> me-1"></i>
-                                <?php echo $announcement['is_active'] ? 'Active' : 'Archived'; ?>
-                            </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs-container fade-in">
+            <button class="nav-tab active" onclick="showSection('announcements')">
+                <i class="fas fa-bullhorn"></i>
+                Announcements
+            </button>
+            <button class="nav-tab" onclick="showSection('banners')">
+                <i class="fas fa-images"></i>
+                Official Banners
+            </button>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="filter-section fade-in">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search announcements and banners...">
+            </div>
+            
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-list me-1"></i> All Items
+                </button>
+                <button class="filter-btn" data-filter="active">
+                    <i class="fas fa-check-circle me-1"></i> Active Only
+                </button>
+                <button class="filter-btn" data-filter="recent">
+                    <i class="fas fa-clock me-1"></i> Recent
+                </button>
+            </div>
+        </div>
+
+        <!-- Announcements Section -->
+        <div id="announcements-section" class="content-section active">
+            <div class="announcements-grid fade-in">
+                <?php if (!empty($all_announcements)): ?>
+                    <?php foreach ($all_announcements as $index => $announcement): ?>
+                        <div class="announcement-card" 
+                             data-status="<?php echo $announcement['is_active'] ? 'active' : 'inactive'; ?>"
+                             data-type="announcement"
+                             style="animation-delay: <?php echo $index * 0.1; ?>s">
                             
-                            <h2 class="announcement-title">
-                                <?php echo htmlspecialchars($announcement['title']); ?>
-                            </h2>
-                        </div>
-
-                        <div class="announcement-content">
-                            <p><?php echo htmlspecialchars($announcement['content']); ?></p>
-                        </div>
-
-                        <div class="announcement-footer">
-                            <div class="announcement-dates">
-                                <div class="date-range">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>
-                                        <?php echo date('M d, Y', strtotime($announcement['start_date'])); ?> - 
-                                        <?php echo date('M d, Y', strtotime($announcement['end_date'])); ?>
-                                    </span>
+                            <div class="announcement-header">
+                                <div class="announcement-status <?php echo $announcement['is_active'] ? 'status-active' : 'status-inactive'; ?>">
+                                    <i class="fas <?php echo $announcement['is_active'] ? 'fa-check-circle' : 'fa-pause-circle'; ?> me-1"></i>
+                                    <?php echo $announcement['is_active'] ? 'Active' : 'Archived'; ?>
                                 </div>
-                                <div class="date-posted">
-                                    <i class="fas fa-clock"></i>
-                                    <span>Posted: <?php echo date('M d, Y', strtotime($announcement['created_at'])); ?></span>
+                                
+                                <h2 class="announcement-title">
+                                    <?php echo htmlspecialchars($announcement['title']); ?>
+                                </h2>
+                            </div>
+
+                            <div class="announcement-content">
+                                <p><?php echo htmlspecialchars($announcement['content']); ?></p>
+                            </div>
+
+                            <div class="announcement-footer">
+                                <div class="announcement-dates">
+                                    <div class="date-range">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>
+                                            <?php echo date('M d, Y', strtotime($announcement['start_date'])); ?> - 
+                                            <?php echo date('M d, Y', strtotime($announcement['end_date'])); ?>
+                                        </span>
+                                    </div>
+                                    <div class="date-posted">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Posted: <?php echo date('M d, Y', strtotime($announcement['created_at'])); ?></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <i class="fas fa-bullhorn"></i>
+                        <h5>No Announcements Available</h5>
+                        <p>There are currently no announcements published. Please check back later for updates and important information from DepEd General Trias City.</p>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="empty-state">
-                    <i class="fas fa-bullhorn"></i>
-                    <h5>No Announcements Available</h5>
-                    <p>There are currently no announcements published. Please check back later for updates and important information from DepEd General Trias City.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Banners Section -->
+        <div id="banners-section" class="content-section">
+            <!-- Debug Info (remove this after fixing) -->
+            <?php if (!empty($all_banners) && isset($_GET['debug'])): ?>
+                <div style="background: #f8f9fa; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-family: monospace; font-size: 12px;">
+                    <strong>Debug Info:</strong><br>
+                    Current directory: <?php echo getcwd(); ?><br>
+                    <?php foreach ($all_banners as $banner): ?>
+                        Original path: <?php echo htmlspecialchars($banner['banner_path']); ?><br>
+                        File exists: <?php echo file_exists($banner['banner_path']) ? 'YES' : 'NO'; ?><br>
+                        ---<br>
+                    <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+            
+            <div class="banners-grid fade-in">
+                <?php if (!empty($all_banners)): ?>
+                    <?php foreach ($all_banners as $index => $banner): ?>
+                        <?php if (file_exists($banner['banner_path'])): ?>
+                            <div class="banner-card" 
+                                 data-status="active"
+                                 data-type="banner"
+                                 style="animation-delay: <?php echo $index * 0.1; ?>s">
+                                
+                                <img src="<?php echo htmlspecialchars($webPath); ?>" 
+                                    alt="Official Banner" 
+                                    class="banner-image"
+                                    onclick="openBannerModal('<?php echo htmlspecialchars($webPath); ?>')"
+                                    onerror="this.parentElement.innerHTML='<div class=\'banner-error\'>Image not found: <?php echo htmlspecialchars($webPath); ?></div>'">
+                                
+                                <div class="banner-info">
+                                    <div class="banner-date">
+                                        <i class="fas fa-calendar-plus"></i>
+                                        <span>Uploaded: <?php echo date('M d, Y', strtotime($banner['created_at'])); ?></span>
+                                    </div>
+                                    
+                                    <a href="<?php echo htmlspecialchars($banner['banner_path']); ?>" 
+                                       target="_blank" 
+                                       class="view-btn">
+                                        <i class="fas fa-eye"></i>
+                                        View Full Size
+                                    </a>
+                                    
+                                    <a href="<?php echo htmlspecialchars($banner['banner_path']); ?>" 
+                                       download="deped_banner_<?php echo date('Ymd', strtotime($banner['created_at'])); ?>.<?php echo pathinfo($banner['banner_path'], PATHINFO_EXTENSION); ?>"
+                                       class="download-btn">
+                                        <i class="fas fa-download"></i>
+                                        Download Banner
+                                    </a>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="banner-card" style="animation-delay: <?php echo $index * 0.1; ?>s">
+                                <div style="padding: 2rem; text-align: center; color: #e74c3c;">
+                                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                                    <p><strong>Banner file not found:</strong><br>
+                                    <small><?php echo htmlspecialchars($banner['banner_path']); ?></small></p>
+                                    <p><small>Uploaded: <?php echo date('M d, Y', strtotime($banner['created_at'])); ?></small></p>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <i class="fas fa-images"></i>
+                        <h5>No Banners Available</h5>
+                        <p>There are currently no official banners available for download. Please check back later for new banner releases from DepEd General Trias City.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Modal -->
+    <div id="bannerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Official Banner Preview</h3>
+                <button class="modal-close" onclick="closeBannerModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="modalBannerImage" src="" alt="Banner Preview" class="modal-image">
+            </div>
         </div>
     </div>
 
@@ -577,26 +904,33 @@ include 'user_header.php';
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        const announcementCards = document.querySelectorAll('.announcement-card');
-
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase().trim();
-            
-            announcementCards.forEach(card => {
-                const title = card.querySelector('.announcement-title').textContent.toLowerCase();
-                const content = card.querySelector('.announcement-content p').textContent.toLowerCase();
-                
-                if (searchTerm === '' || title.includes(searchTerm) || content.includes(searchTerm)) {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeInUp 0.5s ease forwards';
-                } else {
-                    card.style.display = 'none';
-                }
+        // Section switching
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
             });
             
-            updateEmptyState();
+            // Show selected section
+            document.getElementById(sectionName + '-section').classList.add('active');
+            
+            // Update nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Reset search and filters
+            document.getElementById('searchInput').value = '';
+            filterContent();
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const allCards = document.querySelectorAll('.announcement-card, .banner-card');
+
+        searchInput.addEventListener('input', function() {
+            filterContent();
         });
 
         // Filter functionality
@@ -609,31 +943,101 @@ include 'user_header.php';
                 // Add active class to clicked button
                 this.classList.add('active');
                 
-                const filter = this.getAttribute('data-filter');
-                
-                announcementCards.forEach(card => {
-                    const status = card.getAttribute('data-status');
-                    
-                    if (filter === 'all' || filter === status) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeInUp 0.5s ease forwards';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-                
-                updateEmptyState();
+                filterContent();
             });
         });
 
+        function filterContent() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+            const currentSection = document.querySelector('.content-section.active').id;
+            
+            let cardsToFilter;
+            if (currentSection === 'announcements-section') {
+                cardsToFilter = document.querySelectorAll('.announcement-card');
+            } else {
+                cardsToFilter = document.querySelectorAll('.banner-card');
+            }
+            
+            cardsToFilter.forEach(card => {
+                const cardType = card.getAttribute('data-type');
+                const status = card.getAttribute('data-status');
+                let textContent = '';
+                
+                if (cardType === 'announcement') {
+                    const title = card.querySelector('.announcement-title')?.textContent.toLowerCase() || '';
+                    const content = card.querySelector('.announcement-content p')?.textContent.toLowerCase() || '';
+                    textContent = title + ' ' + content;
+                } else if (cardType === 'banner') {
+                    const date = card.querySelector('.banner-date')?.textContent.toLowerCase() || '';
+                    textContent = 'banner ' + date;
+                }
+                
+                let shouldShow = true;
+                
+                // Apply search filter
+                if (searchTerm && !textContent.includes(searchTerm)) {
+                    shouldShow = false;
+                }
+                
+                // Apply status filter
+                if (activeFilter === 'active' && status !== 'active') {
+                    shouldShow = false;
+                } else if (activeFilter === 'recent') {
+                    // Show items from last 30 days
+                    const cardDate = card.querySelector('.date-posted span, .banner-date span')?.textContent;
+                    if (cardDate) {
+                        const dateMatch = cardDate.match(/(\w{3} \d{1,2}, \d{4})/);
+                        if (dateMatch) {
+                            const itemDate = new Date(dateMatch[1]);
+                            const thirtyDaysAgo = new Date();
+                            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                            if (itemDate < thirtyDaysAgo) {
+                                shouldShow = false;
+                            }
+                        }
+                    }
+                }
+                
+                if (shouldShow) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeInUp 0.5s ease forwards';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            updateEmptyState();
+        }
+
         // Update empty state visibility
         function updateEmptyState() {
-            const visibleCards = Array.from(announcementCards).filter(card => 
-                card.style.display !== 'none'
-            );
+            const currentSection = document.querySelector('.content-section.active');
+            const visibleCards = currentSection.querySelectorAll('.announcement-card:not([style*="display: none"]), .banner-card:not([style*="display: none"])');
+            const emptyState = currentSection.querySelector('.empty-state');
             
-            // You can add logic here to show/hide empty state message
-            console.log(`Showing ${visibleCards.length} announcements`);
+            if (visibleCards.length === 0 && emptyState) {
+                // If no original content, show empty state
+                emptyState.style.display = 'block';
+            }
+        }
+
+        // Banner modal functions
+        function openBannerModal(imageSrc) {
+            document.getElementById('modalBannerImage').src = imageSrc;
+            document.getElementById('bannerModal').style.display = 'block';
+        }
+
+        function closeBannerModal() {
+            document.getElementById('bannerModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('bannerModal');
+            if (event.target == modal) {
+                closeBannerModal();
+            }
         }
 
         // Scroll to top functionality
@@ -658,8 +1062,8 @@ include 'user_header.php';
 
         // Loading animations on page load
         document.addEventListener('DOMContentLoaded', function() {
-            // Staggered animation for announcement cards
-            const cards = document.querySelectorAll('.announcement-card');
+            // Staggered animation for cards
+            const cards = document.querySelectorAll('.announcement-card, .banner-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(20px)';
@@ -699,14 +1103,31 @@ include 'user_header.php';
             }
             
             // Clear search on Escape
-            if (e.key === 'Escape' && document.activeElement === searchInput) {
-                searchInput.value = '';
-                searchInput.dispatchEvent(new Event('input'));
+            if (e.key === 'Escape') {
+                if (document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    filterContent();
+                } else if (document.getElementById('bannerModal').style.display === 'block') {
+                    closeBannerModal();
+                }
+            }
+            
+            // Switch sections with arrow keys
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                const currentTab = document.querySelector('.nav-tab.active');
+                const tabs = document.querySelectorAll('.nav-tab');
+                const currentIndex = Array.from(tabs).indexOf(currentTab);
+                
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    tabs[currentIndex - 1].click();
+                } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
+                    tabs[currentIndex + 1].click();
+                }
             }
         });
 
         // Add ripple effect to buttons
-        document.querySelectorAll('.filter-btn, .action-btn').forEach(button => {
+        document.querySelectorAll('.filter-btn, .nav-tab, .download-btn, .view-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
@@ -730,7 +1151,7 @@ include 'user_header.php';
         // Add ripple effect styles
         const style = document.createElement('style');
         style.textContent = `
-            .filter-btn, .action-btn {
+            .filter-btn, .nav-tab, .download-btn, .view-btn {
                 position: relative;
                 overflow: hidden;
             }
@@ -752,6 +1173,43 @@ include 'user_header.php';
             }
         `;
         document.head.appendChild(style);
+
+        // Download tracking (optional - for analytics)
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Banner downloaded:', this.getAttribute('href'));
+                // You can add analytics tracking here
+            });
+        });
+
+        // Lazy loading for banner images
+        const observerOptions = {
+            root: null,
+            rootMargin: '50px',
+            threshold: 0.1
+        };
+
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.style.opacity = '0';
+                    img.style.transition = 'opacity 0.3s ease';
+                    img.onload = () => {
+                        img.style.opacity = '1';
+                    };
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, observerOptions);
+
+        // Observe banner images
+        document.querySelectorAll('.banner-image').forEach(img => {
+            imageObserver.observe(img);
+        });
+
+        // Initialize page
+        filterContent();
     </script>
 </body>
 </html>

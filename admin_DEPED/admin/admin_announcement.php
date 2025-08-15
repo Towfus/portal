@@ -63,6 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_banner'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['banner_image'])) {
     $upload_dir = '../banners/';
     if (!file_exists($upload_dir)) mkdir($upload_dir, 0755, true);
+
+
+    
     
     $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
     $max_size = 2 * 1024 * 1024; // 2MB

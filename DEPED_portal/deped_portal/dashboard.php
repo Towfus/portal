@@ -159,8 +159,6 @@ echo "<!-- DEBUG: Total active announcements: ".$test_row['total']." -->";
                 </div>
             </div>
             <?php endif; ?>
-
-            <!-- Announcement Banner Carousel -->
             <!-- Announcement Banner Carousel -->
             <div class="announcement-banner">
                 <div class="announcement-carousel">
