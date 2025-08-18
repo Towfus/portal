@@ -19,43 +19,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Fetch all banners
-$banner_sql = "SELECT * FROM banners ORDER BY created_at DESC";
-$banner_result = $conn->query($banner_sql);
 
-
-$all_banners = [];
-if ($banner_result->num_rows > 0) {
-    while($row = $banner_result->fetch_assoc()) {
-        // Fix the banner path for user access
-        $banner_path = $row['banner_path'];
-        
-        // Try different possible path combinations
-        $possible_paths = [
-            $banner_path, // original path from database
-            'admin_deped/' . $banner_path, // try with admin_deped prefix
-            str_replace('../', 'admin_deped/', $banner_path), // replace ../ with admin_deped/
-            'admin_deped/banners/' . basename($banner_path) // direct path to banners folder
-        ];
-        
-        $found = false;
-        foreach ($possible_paths as $path) {
-            if (file_exists($path)) {
-                $banner_path = $path;
-                $found = true;
-                break;
-            }
-        }
-        
-        if (!$found) {
-            // If no path works, use a placeholder image
-            $banner_path = 'assets/images/banner-placeholder.jpg';
-        }
-        
-        $row['banner_path'] = $banner_path;
-        $all_banners[] = $row;
-    }
-}
 
 // Get total announcements count
 $totalAnnouncements = count($all_announcements);
@@ -63,8 +27,7 @@ $activeAnnouncements = count(array_filter($all_announcements, function($announce
     return $announcement['is_active'] == 1;
 }));
 
-// Get total banners count
-$totalBanners = count($all_banners);
+
 
 $conn->close();
 include 'user_header.php';
@@ -719,25 +682,10 @@ include 'user_header.php';
                         <span class="stats-number"><?php echo $activeAnnouncements; ?></span>
                         <div class="stats-label">Active Announcements</div>
                     </div>
-                    <div class="stats-card">
-                        <span class="stats-number"><?php echo $totalBanners; ?></span>
-                        <div class="stats-label">Available Banners</div>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs-container fade-in">
-            <button class="nav-tab active" onclick="showSection('announcements')">
-                <i class="fas fa-bullhorn"></i>
-                Announcements
-            </button>
-            <button class="nav-tab" onclick="showSection('banners')">
-                <i class="fas fa-images"></i>
-                Official Banners
-            </button>
-        </div>
 
         <!-- Search and Filter Section -->
         <div class="filter-section fade-in">
@@ -811,91 +759,6 @@ include 'user_header.php';
             </div>
         </div>
 
-        <!-- Banners Section -->
-        <div id="banners-section" class="content-section">
-            <!-- Debug Info (remove this after fixing) -->
-            <?php if (!empty($all_banners) && isset($_GET['debug'])): ?>
-                <div style="background: #f8f9fa; padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-family: monospace; font-size: 12px;">
-                    <strong>Debug Info:</strong><br>
-                    Current directory: <?php echo getcwd(); ?><br>
-                    <?php foreach ($all_banners as $banner): ?>
-                        Original path: <?php echo htmlspecialchars($banner['banner_path']); ?><br>
-                        File exists: <?php echo file_exists($banner['banner_path']) ? 'YES' : 'NO'; ?><br>
-                        ---<br>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-            
-            <div class="banners-grid fade-in">
-                <?php if (!empty($all_banners)): ?>
-                    <?php foreach ($all_banners as $index => $banner): ?>
-                        <?php if (file_exists($banner['banner_path'])): ?>
-                            <div class="banner-card" 
-                                 data-status="active"
-                                 data-type="banner"
-                                 style="animation-delay: <?php echo $index * 0.1; ?>s">
-                                
-                                <img src="<?php echo htmlspecialchars($webPath); ?>" 
-                                    alt="Official Banner" 
-                                    class="banner-image"
-                                    onclick="openBannerModal('<?php echo htmlspecialchars($webPath); ?>')"
-                                    onerror="this.parentElement.innerHTML='<div class=\'banner-error\'>Image not found: <?php echo htmlspecialchars($webPath); ?></div>'">
-                                
-                                <div class="banner-info">
-                                    <div class="banner-date">
-                                        <i class="fas fa-calendar-plus"></i>
-                                        <span>Uploaded: <?php echo date('M d, Y', strtotime($banner['created_at'])); ?></span>
-                                    </div>
-                                    
-                                    <a href="<?php echo htmlspecialchars($banner['banner_path']); ?>" 
-                                       target="_blank" 
-                                       class="view-btn">
-                                        <i class="fas fa-eye"></i>
-                                        View Full Size
-                                    </a>
-                                    
-                                    <a href="<?php echo htmlspecialchars($banner['banner_path']); ?>" 
-                                       download="deped_banner_<?php echo date('Ymd', strtotime($banner['created_at'])); ?>.<?php echo pathinfo($banner['banner_path'], PATHINFO_EXTENSION); ?>"
-                                       class="download-btn">
-                                        <i class="fas fa-download"></i>
-                                        Download Banner
-                                    </a>
-                                </div>
-                            </div>
-                        <?php else: ?>
-                            <div class="banner-card" style="animation-delay: <?php echo $index * 0.1; ?>s">
-                                <div style="padding: 2rem; text-align: center; color: #e74c3c;">
-                                    <i class="fas fa-exclamation-triangle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                                    <p><strong>Banner file not found:</strong><br>
-                                    <small><?php echo htmlspecialchars($banner['banner_path']); ?></small></p>
-                                    <p><small>Uploaded: <?php echo date('M d, Y', strtotime($banner['created_at'])); ?></small></p>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="empty-state">
-                        <i class="fas fa-images"></i>
-                        <h5>No Banners Available</h5>
-                        <p>There are currently no official banners available for download. Please check back later for new banner releases from DepEd General Trias City.</p>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-
-    <!-- Banner Modal -->
-    <div id="bannerModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Official Banner Preview</h3>
-                <button class="modal-close" onclick="closeBannerModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <img id="modalBannerImage" src="" alt="Banner Preview" class="modal-image">
-            </div>
-        </div>
-    </div>
 
     <!-- Floating Action Button -->
     <a href="#" class="floating-btn" title="Back to Top" onclick="scrollToTop()">
