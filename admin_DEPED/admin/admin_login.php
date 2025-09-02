@@ -101,9 +101,6 @@ $conn->close();
                 </div>
                 <button type="submit" class="sign-in-btn">Log In</button>
             </form>
-            <div class="register-link">
-                Don't have an account? <a href="admin_register.php">Register here</a>
-            </div>
         </div>
     </div>
 </body>
